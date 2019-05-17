@@ -1,0 +1,68 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: hydata
+    url: jdbc:mariadb://192.168.5.12:3307/demo?useUnicode=true&characterEncoding=utf8
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari.minimum-idle: 10
+    hikari.maximum-pool-size: 20
+    hikari.auto-commit: true
+    hikari.idle-timeout: 30000
+    hikari.pool-name: DatebookHikariCP
+    hikari.max-lifetime: 1800000
+    hikari.connection-timeout: 30000
+    hikari.connection-test-query: SELECT 1
+
+  jackson:
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      #格式化输出
+      indent_output: true
+      #忽略无法转换的对象
+      fail_on_empty_beans: false
+    #设置空如何序列化
+    defaultPropertyInclusion: NON_EMPTY
+    deserialization:
+      #允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+logging:
+  config: classpath:log4j2-prd.xml
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  reasonable: false
+
+server:
+  port: 8086
+  servlet:
+    context-path: /springboot-model
+  compression:
+    enabled: true
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    worker-threads: 20
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+    accesslog:
+      enabled: true
+      pattern: '%t %a "%r" %s (%D ms)'
+

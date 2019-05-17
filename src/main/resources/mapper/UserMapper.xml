@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hiynn.module.dao.UserMapper">
+
+	<cache/>
+
+	<select id="getUsers" resultType="java.util.LinkedHashMap">
+		SELECT ID "id",NAME "name" from tb_user
+	</select>
+
+	<select id="getUserById" resultType="java.util.LinkedHashMap">
+		select * from tb_user where id = #{id}
+	</select>
+
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(id) from tb_user
+	</select>
+
+	<insert id="insertUser" parameterType="java.util.LinkedHashMap">
+        INSERT INTO tb_user (name,password,createtime,level,uid) VALUES (#{name},#{password},now(),#{level},#{uid})
+    </insert>
+
+	<delete id="deleteUserById" parameterType="java.lang.Integer">
+		delete from tb_user where id = #{id}
+	</delete>
+
+	<update id="updateUser" parameterType="java.util.LinkedHashMap">
+		update tb_user set name = #{name}, password = #{password},level=#{level},uid = #{uid},
+		updatetime = now() where id = #{id}
+	</update>
+
+</mapper>

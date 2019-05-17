@@ -1,0 +1,44 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+    <service>
+        <jsr107:defaults enable-management="true" enable-statistics="true"/>
+    </service>
+
+    <cache-template name="defaultTemplate">
+        <expiry>
+            <ttl unit="minutes">10</ttl>
+        </expiry>
+        <listeners>
+            <listener>
+                <class>com.hiynn.module.config.DefaultCacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>UPDATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <events-to-fire-on>REMOVED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners>
+        <resources>
+            <heap unit="entries">2000</heap>
+            <offheap unit="MB">100</offheap>
+        </resources>
+    </cache-template>
+
+
+    <!--实际的缓存区间，继承了defaultTemplate缓存模板,完全使用模板默认-->
+    <cache alias="default" uses-template="defaultTemplate">
+    </cache>
+
+    <!--继承了defaultTemplate缓存模板，但覆盖了缓存的过期时间-->
+    <cache alias="custom" uses-template="defaultTemplate">
+        <expiry>
+            <ttl unit="hours">1</ttl>
+        </expiry>
+    </cache>
+</config>
